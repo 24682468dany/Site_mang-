@@ -10,30 +10,30 @@ route.get('/',async (req, res) => {
 });
 
 route.post('/', validatePaginas, async (req, res) => {
-    const {id,num_pagina,imagem,id_capitulo} = req.body;
-    const [result] = await connection.execute('INSERT INTO paginas(id,num_pagina,imagem,id_capitulo) VALUES(?,?,?,?)',[id,num_pagina,imagem,id_capitulo])
+    const {id,num_pagina,desing,id_capitulo} = req.body;
+    const [result] = await connection.execute('INSERT INTO paginas(id,num_pagina,desing,id_capitulo) VALUES(?,?,?,?)',[id,num_pagina,desing,id_capitulo])
    
     const newPaginas = {
         id:result.insertId,
         id,
         num_pagina,
-        imagem,
+        desing,
         id_capitulo
     }
     res.status(201).json(newPaginas);
 })
 route.put('/:id',validatePaginas, (req, res) => {
-    const {id,num_pagina,imagem,id_capitulo} = req.body;
+    const {id,num_pagina,desing,id_capitulo} = req.body;
     const {} = req.params;
 
     const updateRoutes = connection.execute(`UPDATE paginas
-    SET num_pagina = ? , imagem?, id_capitulo = ?
-    WHERE id = ?`, [num_pagina,imagem,id_capitulo, id])
+    SET num_pagina = ? , desing = ?, id_capitulo = ?
+    WHERE id = ?`, [num_pagina,desing,id_capitulo, id])
 
     const newPaginas= {
         id,
         num_pagina,
-        imagem,
+        desing,
         id_capitulo
     }
 

@@ -1,42 +1,43 @@
 const express = require('express'); 
 const route = express.Router();
 const connection = require('../DB/connection');
+const validateCapitulo = require('../middlewares/validateCapitulos');
 
 
-route.get('/',async (req, res) => {
+route.get('/', async (req, res) => {
     const [result] = await connection.execute('SELECT * FROM capitulos');
     res.status(200).json(result);
 });
 
-route.post('/', async (req, res) => {
-    const {id,titulo,num_capitulo,id_manga} = req.body;
-    const [result] = await connection.execute('INSERT INTO mangas(id,titulo,num_capitulo,id_manga) VALUES(?,?,?,?)',[id,titulo,num_capitulo,id_manga])
+route.post('/',validateCapitulo, async (req, res) => {
+    const {id,titulo,num_capitulo,id_identificacao} = req.body;
+    const [result] = await connection.execute('INSERT INTO mangas(id,titulo,num_capitulo,id_identificacao) VALUES(?,?,?,?)',[id,titulo,num_capitulo,id_identificacao])
    
-    const newRoutes = {
+    const newCapitulos = {
         id:result.insertId,
         id,
         titulo,
         num_capitulo,
-        id_manga
+        id_identificacao
     }
-    res.status(201).json(newRoutes);
+    res.status(201).json(newCapitulos);
 })
-route.put('/:id', (req, res) => {
-    const {id,titulo,num_capitulo,id_manga} = req.body;
+route.put('/:id',validateCapitulo, (req, res) => {
+    const {id,titulo,num_capitulo,id_identificacao} = req.body;
     const {} = req.params;
 
     const updateRoutes = connection.execute(`UPDATE capitulos
-    SET titulo = ? ,num_capitulo? id_manga = ?
-    WHERE id = ?`, [titulo,num_capitulo,id_manga,id])
+    SET titulo = ? ,num_capitulo = ? id_identificacao = ?
+    WHERE id = ?`, [titulo,num_capitulo,id_identificacao,id])
 
-    const newRoutes= {
+    const newCapitulos= {
         id,
         titulo,
         num_capitulo,
-        id_manga
+        id_identificacao
     }
 
-    res.status(201).json(newRoutes);
+    res.status(201).json(newCapitulos);
 })
 route.delete('/:id',async(req,res)=>{
     const{id} = req.params;
