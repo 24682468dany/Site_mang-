@@ -1,20 +1,20 @@
-const joi = require('joi')
+const Joi = require('joi');
 
-const LEITURA =joi.object({
-id_usuario:joi.number().min(1).max(60).required(),
-capitulo_atual:joi.number().min(1).required(),
-data_leitura:joi.number().min(1).required(),
-})
+// Middleware de validação para leitura
+const validateLeitura = (req, res, next) => {
+  const schema = Joi.object({
+    id_usuario: Joi.number().integer().required(),
+    capitulo_atual: Joi.number().integer().required(),
+    data_leitura: Joi.date().required()
+  });
 
-function validateLeitura(req,res,next){
-const {id_usuario,capitulo_atual,data_leitura}=req.body
+  const { error } = schema.validate(req.body);
 
-const {error}=LEITURA.validate({id_usuario,capitulo_atual,data_leitura})
+  if (error) {
+    res.status(400).json({ message: error.details[0].message });
+  } else {
+    next();
+  }
+};
 
-if(error){
-    next({status:400,message:error.details[0].message});
-}
-
-next();
-}
 module.exports = validateLeitura;

@@ -1,19 +1,20 @@
-const joi = require('joi')
+const Joi = require('joi');
 
-const CAPITULO =joi.object({
-titulo:joi.string().required(),
-num_capitulo:joi.number().required(),
-id_identificacao:joi.string().required(),
-})
-function validateCapitulo(req,res,next){
-const {titulo,num_capitulo,id_identificacao}=req.body
+// Middleware de validação para capitulos
+const validateCapitulo = (req, res, next) => {
+  const schema = Joi.object({
+    titulo: Joi.string().required(),
+    num_capitulo: Joi.number().integer().required(),
+    id_identificacao: Joi.number().integer().required()
+  });
 
-const {error}=CAPITULO.validate({titulo,num_capitulo,id_identificacao})
+  const { error } = schema.validate(req.body);
 
-if(error){
-    next({status:400,message:error.details[0].message});
-}
+  if (error) {
+    res.status(400).json({ message: error.details[0].message });
+  } else {
+    next();
+  }
+};
 
-next();
-}
 module.exports = validateCapitulo;

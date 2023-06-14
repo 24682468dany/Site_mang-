@@ -1,16 +1,12 @@
-const routesMangas = require('./routesMangas')
-const routesCapitulos = require('./routesCapitulos')
-const routesPaginas = require('./routesPaginas')
-const routesLeitura = require('./routesLeitura')
+const routesMangas = require('../routes/routesMangas');
+const routesPaginas = require('../routes/routesPaginas');
+const routesCapitulos =require('../routes/routesCapitulos')
+const routesLeituras = require('./routesLeitura')
 
+module.exports = {
+  routesMangas,
+  routesPaginas,
+  routesCapitulos,
+  routesLeituras
 
-
-
-
-module.exports ={ 
-    
-    routesMangas,
-    routesCapitulos,
-    routesPaginas,
-    routesLeitura
 }
